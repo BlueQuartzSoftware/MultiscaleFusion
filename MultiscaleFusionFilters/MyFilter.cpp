@@ -105,7 +105,7 @@ void MyFilter::execute()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AbstractFilter::Pointer MyFilter::newFilterInstance(bool copyFilterParameters)
+AbstractFilter::Pointer MyFilter::newFilterInstance(bool copyFilterParameters) const
 {
   MyFilter::Pointer filter = MyFilter::New();
   if(true == copyFilterParameters)
@@ -118,7 +118,7 @@ AbstractFilter::Pointer MyFilter::newFilterInstance(bool copyFilterParameters)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getCompiledLibraryName()
+const QString MyFilter::getCompiledLibraryName() const
 { 
   return MultiscaleFusionConstants::MultiscaleFusionBaseName;
 }
@@ -126,7 +126,7 @@ const QString MyFilter::getCompiledLibraryName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getBrandingString()
+const QString MyFilter::getBrandingString() const
 {
   return "MultiscaleFusion";
 }
@@ -134,7 +134,7 @@ const QString MyFilter::getBrandingString()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getFilterVersion()
+const QString MyFilter::getFilterVersion() const
 {
   QString version;
   QTextStream vStream(&version);
@@ -145,7 +145,7 @@ const QString MyFilter::getFilterVersion()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getGroupName()
+const QString MyFilter::getGroupName() const
 { 
   return SIMPL::FilterGroups::Unsupported; 
 }
@@ -153,7 +153,7 @@ const QString MyFilter::getGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getSubGroupName()
+const QString MyFilter::getSubGroupName() const
 { 
   return "MultiscaleFusion"; 
 }
@@ -161,7 +161,7 @@ const QString MyFilter::getSubGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyFilter::getHumanLabel()
+const QString MyFilter::getHumanLabel() const
 { 
   return "MyFilter"; 
 }

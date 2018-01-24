@@ -105,7 +105,7 @@ void MyPrivateFilter::execute()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AbstractFilter::Pointer MyPrivateFilter::newFilterInstance(bool copyFilterParameters)
+AbstractFilter::Pointer MyPrivateFilter::newFilterInstance(bool copyFilterParameters) const
 {
   MyPrivateFilter::Pointer filter = MyPrivateFilter::New();
   if(true == copyFilterParameters)
@@ -118,7 +118,7 @@ AbstractFilter::Pointer MyPrivateFilter::newFilterInstance(bool copyFilterParame
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getCompiledLibraryName()
+const QString MyPrivateFilter::getCompiledLibraryName() const
 { 
   return MultiscaleFusionConstants::MultiscaleFusionBaseName;
 }
@@ -126,7 +126,7 @@ const QString MyPrivateFilter::getCompiledLibraryName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getBrandingString()
+const QString MyPrivateFilter::getBrandingString() const
 {
   return "MultiscaleFusion";
 }
@@ -134,7 +134,7 @@ const QString MyPrivateFilter::getBrandingString()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getFilterVersion()
+const QString MyPrivateFilter::getFilterVersion() const
 {
   QString version;
   QTextStream vStream(&version);
@@ -145,7 +145,7 @@ const QString MyPrivateFilter::getFilterVersion()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getGroupName()
+const QString MyPrivateFilter::getGroupName() const
 { 
   return SIMPL::FilterGroups::Unsupported; 
 }
@@ -153,7 +153,7 @@ const QString MyPrivateFilter::getGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getSubGroupName()
+const QString MyPrivateFilter::getSubGroupName() const
 { 
   return "MultiscaleFusion"; 
 }
@@ -161,7 +161,7 @@ const QString MyPrivateFilter::getSubGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString MyPrivateFilter::getHumanLabel()
+const QString MyPrivateFilter::getHumanLabel() const
 { 
   return "MyPrivateFilter"; 
 }
