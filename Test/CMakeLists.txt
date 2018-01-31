@@ -8,11 +8,18 @@ set(${PLUGIN_NAME}Test_BINARY_DIR ${${PLUGIN_NAME}_BINARY_DIR}/Test)
 # be directly included in the main test source file. We list them here so that
 # they will show up in IDEs
 set(TEST_NAMES
-  MyPrivateFilter
-  MyFilter
+  MyPrivateFilterTest
+  MyFilterTest
 
 )
 
+list(APPEND ${PLUGIN_NAME}_LINK_LIBS Qt5::Core H5Support SIMPLib)
+
+if(APPLE)
+ list(APPEND ${PLUGIN_NAME}_LINK_LIBS SimpleITKExplicit)
+else()
+  list(APPEND ${PLUGIN_NAME}_LINK_LIBS ${ITK_LIBRARIES})
+endif()
 #------------------------------------------------------------------------------
 # Include this file from the CMP Project
 include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake)

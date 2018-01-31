@@ -210,6 +210,30 @@ void MultiscaleFusionPlugin::readSettings(QSettings& prefs)
 {
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginFileName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionPluginFile;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginDisplayName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionPluginDisplayName;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginBaseName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionBaseName;
+}
+
 #include "MultiscaleFusionFilters/RegisterKnownFilters.cpp"
 
 #include "FilterParameterWidgets/RegisterKnownFilterParameterWidgets.cpp"
