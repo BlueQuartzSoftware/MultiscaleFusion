@@ -1,4 +1,4 @@
-MyFilter {#myfilter}
+MyFilter 
 =============
 
 ## Group (Subgroup) ##

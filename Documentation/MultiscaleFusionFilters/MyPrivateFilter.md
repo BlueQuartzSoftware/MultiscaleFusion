@@ -1,4 +1,4 @@
-MyPrivateFilter {#myprivatefilter}
+MyPrivateFilter 
 =============
 
 ## Group (Subgroup) ##
