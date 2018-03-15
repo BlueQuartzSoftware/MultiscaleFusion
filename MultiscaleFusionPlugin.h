@@ -29,6 +29,29 @@ class MultiscaleFusionPlugin : public QObject, public ISIMPLibPlugin
     virtual QString getPluginName();
 
     /**
+    * @brief Returns the name of the plugin that appears on the file system.
+    *
+    * Note that if the build is a debug build there will be a _Plugin postfix
+    * to the filename.
+    */
+    virtual QString getPluginFileName();
+
+    /**
+    * @brief getPluginDisplayName The name that should be used for human facing
+    * labels and display strings
+    * @return
+    */
+    virtual QString getPluginDisplayName();
+
+    /**
+    * @brief getPluginBaseName The Name of the plugin.
+    *
+    * This typically will NOT have the Plugin suffix.
+    * @return
+    */
+    virtual QString getPluginBaseName();
+
+    /**
      * @brief getVersion Returns the version
      */
     virtual QString getVersion();
