@@ -18,8 +18,7 @@ SIMPL_START_FILTER_GROUP(
 # List your public filters here
 set(_PublicFilters
   MyFilter
-  MyPrivateFilter
-
+  ITKPhaseCorrelationImageRegistration
 )
 
 list(LENGTH _PublicFilters PluginNumFilters)
@@ -41,7 +40,7 @@ endforeach()
 # This is the list of Private Filters. These filters are available from other filters but the user will not
 # be able to use them from the DREAM3D user interface.
 set(_PrivateFilters
-
+  MyPrivateFilter
 )
 
 #-----------------
@@ -52,7 +51,11 @@ foreach(f ${_PrivateFilters} )
                         ${${PLUGIN_NAME}_SOURCE_DIR}/Documentation/${_filterGroupName}/${f}.md FALSE ${${PLUGIN_NAME}_BINARY_DIR})
 endforeach()
 
+#-------------
+# These are files that need to be compiled into DREAM3DLib but are NOT filters
 
+set(Project_SRCS ${Project_SRCS}
+    ${PLUGINS_SOURCE_DIR}/ITKImageProcessing/ITKImageProcessingFilters/ITKImageBase.h)
 
 #---------------------
 # This macro must come last after we are done adding all the filters and support files.
