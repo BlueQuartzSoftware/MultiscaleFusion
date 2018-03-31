@@ -19,7 +19,6 @@ MyFilter::MyFilter() :
   AbstractFilter()
 {
   initialize();
-  setupFilterParameters();
 }
 
 // -----------------------------------------------------------------------------

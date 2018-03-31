@@ -36,7 +36,6 @@
 ITKPhaseCorrelationImageRegistration::ITKPhaseCorrelationImageRegistration()
 : ITKImageBase()
 {
-  setupFilterParameters();
 }
 
 // -----------------------------------------------------------------------------

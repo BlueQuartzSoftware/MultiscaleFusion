@@ -19,7 +19,6 @@ MyPrivateFilter::MyPrivateFilter() :
   AbstractFilter()
 {
   initialize();
-  setupFilterParameters();
 }
 
 // -----------------------------------------------------------------------------

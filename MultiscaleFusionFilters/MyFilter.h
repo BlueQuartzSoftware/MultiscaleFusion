@@ -18,12 +18,10 @@ class MyFilter : public AbstractFilter
 
   public:
     SIMPL_SHARED_POINTERS(MyFilter)
-    SIMPL_STATIC_NEW_MACRO(MyFilter)
+    SIMPL_FILTER_NEW_MACRO(MyFilter)
     SIMPL_TYPE_MACRO_SUPER(MyFilter, AbstractFilter)
 
-    virtual ~MyFilter();
-
-
+    ~MyFilter() override;
 
     /**
      * @brief getCompiledLibraryName Reimplemented from @see AbstractFilter class
