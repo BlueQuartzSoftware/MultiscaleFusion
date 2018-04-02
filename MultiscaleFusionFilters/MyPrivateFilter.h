@@ -121,7 +121,8 @@ class MyPrivateFilter : public AbstractFilter
 
   private:
     MyPrivateFilter(const MyPrivateFilter&); // Copy Constructor Not Implemented
-    void operator=(const MyPrivateFilter&); // Operator '=' Not Implemented
+    MyPrivateFilter& operator=(const MyPrivateFilter&) = delete; // Copy Assignment Not Implemented
+    MyPrivateFilter& operator=(MyPrivateFilter&&) = delete;      // Move Assignment Not Implemented
 };
 
 #endif /* _MyPrivateFilter_H_ */
