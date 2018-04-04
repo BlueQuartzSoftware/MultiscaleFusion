@@ -36,9 +36,7 @@ m_DidLoad(false)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MultiscaleFusionPlugin::~MultiscaleFusionPlugin()
-{
-}
+MultiscaleFusionPlugin::~MultiscaleFusionPlugin() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -208,6 +206,30 @@ void MultiscaleFusionPlugin::writeSettings(QSettings& prefs)
 // -----------------------------------------------------------------------------
 void MultiscaleFusionPlugin::readSettings(QSettings& prefs)
 {
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginFileName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionPluginFile;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginDisplayName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionPluginDisplayName;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString MultiscaleFusionPlugin::getPluginBaseName()
+{
+  return MultiscaleFusionConstants::MultiscaleFusionBaseName;
 }
 
 #include "MultiscaleFusionFilters/RegisterKnownFilters.cpp"

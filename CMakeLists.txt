@@ -1,5 +1,15 @@
 #--////////////////////////////////////////////////////////////////////////////
-#-- Your License or Copyright can go here
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0.txt
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #--////////////////////////////////////////////////////////////////////////////
 
 set(PLUGIN_NAME MultiscaleFusion)
@@ -9,6 +19,15 @@ set(${PLUGIN_NAME}_VERSION_MINOR "0")
 get_filename_component(${PLUGIN_NAME}_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" ABSOLUTE)
 set(${PLUGIN_NAME}_BINARY_DIR "${DREAM3DProj_BINARY_DIR}/Plugins/${PLUGIN_NAME}")
 
+
+# --------------------------------------------------------------------
+# Look for ITK as it is required.
+if(NOT SIMPL_USE_ITK)
+  set(PluginNumFilters "-100")
+  set(DREAM3D_BUILD_PLUGIN_${PLUGIN_NAME} "OFF")
+  message(STATUS "${PLUGIN_NAME}: SIMPL_USE_ITK=OFF, ${PLUGIN_NAME} is disabled.")
+  return()
+endif()
 # --------------------------------------------------------------------
 # Look for Qt 5 as we need it for the plugin GUI to be generated
 if(NOT Qt5Core_FOUND)
@@ -28,6 +47,15 @@ cmpRevisionString( GENERATED_HEADER_FILE_PATH "${VERSION_HEADER_FILE_NAME}"
 set(${PLUGIN_NAME}_Project_SRCS "")
 
 include(${SIMPLProj_SOURCE_DIR}/Source/SIMPLib/SIMPLibMacros.cmake)
+
+# Find ITKMontage
+# Find the ITKMontage module
+set(DREAM3D_ADDITIONAL_ITK_MODULES
+    Montage
+    )
+set_property(GLOBAL APPEND PROPERTY DREAM3D_ADDITIONAL_ITK_MODULES ${DREAM3D_ADDITIONAL_ITK_MODULES})
+include(${CMP_SOURCE_DIR}/ITKSupport/IncludeITK.cmake)
+
 #-------
 # Start writing this header file
 set(AllFiltersHeaderFile ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}Filters/${PLUGIN_NAME}Filters.h_tmp)
@@ -45,6 +73,9 @@ file(APPEND ${RegisterKnownFiltersFile} "\n//-----------------------------------
 file(APPEND ${RegisterKnownFiltersFile} "\nvoid ${PLUGIN_NAME}Plugin::registerFilters(FilterManager* fm)\n{\n")
 
 set(Project_SRCS "")
+
+get_filename_component(PLUGINS_SOURCE_DIR  ${${PLUGIN_NAME}_SOURCE_DIR} DIRECTORY)
+get_filename_component(PLUGINS_BINARY_DIR  ${${PLUGIN_NAME}_BINARY_DIR} DIRECTORY)
 
 # Add in our Filter classes
 include(${${PLUGIN_NAME}_SOURCE_DIR}/${PLUGIN_NAME}Filters/SourceList.cmake)
@@ -80,9 +111,6 @@ set(AllFiltersHeaderFile ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}Filters/${PL
 set(RegisterKnownFiltersFile ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}Filters/RegisterKnownFilters.cpp)
 
 #--------------------------
-get_filename_component(PLUGINS_SOURCE_DIR  ${${PLUGIN_NAME}_SOURCE_DIR} DIRECTORY)
-get_filename_component(PLUGINS_BINARY_DIR  ${${PLUGIN_NAME}_BINARY_DIR} DIRECTORY)
-
 set(FILTER_HEADERS "#include \"${AllFiltersHeaderFile}\"")
 set(FILTER_WIDGETS_TEMP_DIR ${${PLUGIN_NAME}_BINARY_DIR}/Temp)
 set(FILTER_WIDGETS_BINARY_DIR ${${PLUGIN_NAME}_BINARY_DIR})
@@ -220,6 +248,7 @@ target_link_libraries(${plug_target_name}
                     Qt5::Gui 
                     Qt5::Widgets
                     SVWidgetsLib
+                    ${ITK_LIBRARIES}
                     )
 
 # --------------------------------------------------------------------

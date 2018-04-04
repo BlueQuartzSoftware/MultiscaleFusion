@@ -19,15 +19,12 @@ MyPrivateFilter::MyPrivateFilter() :
   AbstractFilter()
 {
   initialize();
-  setupFilterParameters();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MyPrivateFilter::~MyPrivateFilter()
-{
-}
+MyPrivateFilter::~MyPrivateFilter() = default;
 
 // -----------------------------------------------------------------------------
 //
