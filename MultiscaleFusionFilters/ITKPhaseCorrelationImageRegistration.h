@@ -37,6 +37,9 @@
 class ITKPhaseCorrelationImageRegistration : public ITKImageBase
 {
   Q_OBJECT
+  PYB11_CREATE_BINDINGS(ITKPhaseCorrelationImageRegistration SUPERCLASS AbstractFilter)
+  PYB11_PROPERTY(DataArrayPath SelectedCellArrayPath READ getSelectedCellArrayPath WRITE setSelectedCellArrayPath)
+  PYB11_PROPERTY(DataArrayPath MovingCellArrayPath READ getMovingCellArrayPath WRITE setMovingCellArrayPath)
 
 public:
   SIMPL_SHARED_POINTERS(ITKPhaseCorrelationImageRegistration)
