@@ -25,8 +25,8 @@
 
 #include <itkCastImageFilter.h>
 
-#include "ITKImageProcessing/ITKImageProcessingFilters/Dream3DTemplateAliasMacro.h"
-#include "ITKImageProcessing/ITKImageProcessingFilters/itkDream3DImage.h"
+#include "SIMPLib/ITK/Dream3DTemplateAliasMacro.h"
+#include "SIMPLib/ITK/itkDream3DImage.h"
 
 #include "MultiscaleFusion/MultiscaleFusionConstants.h"
 #include "MultiscaleFusion/MultiscaleFusionVersion.h"

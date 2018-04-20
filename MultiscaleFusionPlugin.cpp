@@ -232,7 +232,11 @@ QString MultiscaleFusionPlugin::getPluginBaseName()
   return MultiscaleFusionConstants::MultiscaleFusionBaseName;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void MultiscaleFusionPlugin::registerFilterWidgets(FilterWidgetManager* fwm)
+{
+}
+
 #include "MultiscaleFusionFilters/RegisterKnownFilters.cpp"
-
-#include "FilterParameterWidgets/RegisterKnownFilterParameterWidgets.cpp"
-
