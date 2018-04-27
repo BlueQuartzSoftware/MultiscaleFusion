@@ -10,10 +10,13 @@
 
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 
+#include "MultiscaleFusion/MultiscaleFusionDLLExport.h"
+
 /**
  * @brief The MultiscaleFusionPlugin class
  */
-class MultiscaleFusionPlugin : public QObject, public ISIMPLibPlugin
+class MultiscaleFusion_EXPORT MultiscaleFusionPlugin : public QObject, public ISIMPLibPlugin
+
 {
     Q_OBJECT
     Q_INTERFACES(ISIMPLibPlugin)

@@ -10,7 +10,13 @@ class MultiscaleFusionGuiPlugin : public MultiscaleFusionPlugin
 
 public:
   MultiscaleFusionGuiPlugin();
-  ~MultiscaleFusionGuiPlugin() override;
+   ~MultiscaleFusionGuiPlugin() override;
+  
+  /**
+   * @brief Register all the filters with the FilterWidgetFactory
+   */
+  void registerFilterWidgets(FilterWidgetManager* fwm) override;
+  
 
 public:
   MultiscaleFusionGuiPlugin(const MultiscaleFusionGuiPlugin&) = delete;            // Copy Constructor Not Implemented
