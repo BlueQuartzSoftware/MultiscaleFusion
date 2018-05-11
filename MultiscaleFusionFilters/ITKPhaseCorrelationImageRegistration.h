@@ -30,11 +30,12 @@
 #include "itkPhaseCorrelationImageRegistrationMethod.h"
 #include "itkMaxPhaseCorrelationOptimizer.h"
 
+#include "MultiscaleFusion/MultiscaleFusionDLLExport.h"
 
 /**
  * @brief The ITKPhaseCorrelationImageRegistration class. See [Filter documentation](@ref ITKPhaseCorrelationImageRegistration) for details.
  */
-class ITKPhaseCorrelationImageRegistration : public ITKImageBase
+class MultiscaleFusion_EXPORT ITKPhaseCorrelationImageRegistration : public ITKImageBase
 {
   Q_OBJECT
   PYB11_CREATE_BINDINGS(ITKPhaseCorrelationImageRegistration SUPERCLASS AbstractFilter)

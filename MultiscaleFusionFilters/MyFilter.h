@@ -9,10 +9,12 @@
 #include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
+#include "MultiscaleFusion/MultiscaleFusionDLLExport.h"
+
 /**
  * @brief The MyFilter class. See [Filter documentation](@ref myfilter) for details.
  */
-class MyFilter : public AbstractFilter
+class MultiscaleFusion_EXPORT MyFilter : public AbstractFilter
 {
   Q_OBJECT
 
