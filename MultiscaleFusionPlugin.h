@@ -2,8 +2,7 @@
  * Your License or Copyright can go here
  */
 
-#ifndef _multiscalefusionplugin_h_
-#define _multiscalefusionplugin_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QSettings>
@@ -168,4 +167,3 @@ class MultiscaleFusion_EXPORT MultiscaleFusionPlugin : public QObject, public IS
     void operator=(const MultiscaleFusionPlugin&); // Operator '=' Not Implemented
 };
 
-#endif /* _MultiscaleFusion_H_ */

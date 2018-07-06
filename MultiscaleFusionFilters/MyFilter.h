@@ -2,8 +2,7 @@
  * Your License or Copyright can go here
  */
 
-#ifndef _myfilter_h_
-#define _myfilter_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Filtering/AbstractFilter.h"
@@ -127,4 +126,3 @@ class MultiscaleFusion_EXPORT MyFilter : public AbstractFilter
     MyFilter& operator=(MyFilter&&) = delete;      // Move Assignment Not Implemented
 };
 
-#endif /* _MyFilter_H_ */
