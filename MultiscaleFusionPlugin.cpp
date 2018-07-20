@@ -7,9 +7,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 
+#include "SIMPLib/Filtering/FilterFactory.hpp"
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Filtering/IFilterFactory.hpp"
-#include "SIMPLib/Filtering/FilterFactory.hpp"
 
 #include "MultiscaleFusion/MultiscaleFusionConstants.h"
 
@@ -19,18 +19,23 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MultiscaleFusionPlugin::MultiscaleFusionPlugin() :
-m_Version("0.1.0"),                            // Initialize MultiscaleFusion's Version Number Here
-m_CompatibilityVersion("0.1.0"), // Initialize MultiscaleFusion's Compatibility Version Number Here
-m_Vendor("Vendor Name"),                                // Initialize MultiscaleFusion's Vendor Name Here
-m_URL("URL"),                                           // Initialize Company URL Here
-m_Location("Location"),                                 // Initialize MultiscaleFusion library Location Here
-m_Description("Description"),                           // Initialize MultiscaleFusion's Description Here
-m_Copyright("Copyright"),                               // Initialize MultiscaleFusion's Copyright Here
-m_Filters(QList<QString>()),                        // Initialize MultiscaleFusion's List of Dependencies Here
-m_DidLoad(false)
+MultiscaleFusionPlugin::MultiscaleFusionPlugin()
+: m_Version(MultiscaleFusion::Version::Package())
+, m_CompatibilityVersion(MultiscaleFusion::Version::Package())
+, m_Vendor("BlueQuartz Software")
+, // Initialize MultiscaleFusion's Vendor Name Here
+    m_URL("http://www.github.com/bluequartzsoftware/MultiscaleFusion")
+, // Initialize Company URL Here
+    m_Location("")
+, // Initialize MultiscaleFusion library Location Here
+    m_Description("")
+, // Initialize MultiscaleFusion's Description Here
+    m_Copyright("")
+, // Initialize MultiscaleFusion's Copyright Here
+    m_Filters(QList<QString>())
+, // Initialize MultiscaleFusion's List of Dependencies Here
+    m_DidLoad(false)
 {
-
 }
 
 // -----------------------------------------------------------------------------
@@ -98,9 +103,9 @@ QString MultiscaleFusionPlugin::getDescription()
   QFileInfo licenseFileInfo(licenseFile);
   QString text = "<<--Description was not read-->>";
 
-  if ( licenseFileInfo.exists() )
+  if(licenseFileInfo.exists())
   {
-    if ( licenseFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+    if(licenseFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
       QTextStream in(&licenseFile);
       text = in.readAll();
@@ -129,9 +134,9 @@ QString MultiscaleFusionPlugin::getLicense()
   QFileInfo licenseFileInfo(licenseFile);
   QString text = "<<--License was not read-->>";
 
-  if ( licenseFileInfo.exists() )
+  if(licenseFileInfo.exists())
   {
-    if ( licenseFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+    if(licenseFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
       QTextStream in(&licenseFile);
       text = in.readAll();
@@ -152,14 +157,14 @@ QMap<QString, QString> MultiscaleFusionPlugin::getThirdPartyLicenses()
   fileStrList.push_back(":/ThirdParty/Qt.txt");
   fileStrList.push_back(":/ThirdParty/Qwt.txt");
 
-  for (QList<QString>::iterator iter = fileStrList.begin(); iter != fileStrList.end(); iter++)
+  for(QList<QString>::iterator iter = fileStrList.begin(); iter != fileStrList.end(); iter++)
   {
     QFile file(*iter);
     QFileInfo licenseFileInfo(file);
 
-    if ( licenseFileInfo.exists() )
+    if(licenseFileInfo.exists())
     {
-      if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
+      if(file.open(QIODevice::ReadOnly | QIODevice::Text))
       {
         QTextStream in(&file);
         licenseMap.insert(licenseFileInfo.baseName(), in.readAll());
