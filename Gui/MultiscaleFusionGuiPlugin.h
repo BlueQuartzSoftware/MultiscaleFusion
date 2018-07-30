@@ -20,7 +20,7 @@ public:
 
 public:
   MultiscaleFusionGuiPlugin(const MultiscaleFusionGuiPlugin&) = delete;            // Copy Constructor Not Implemented
-  MultiscaleFusionGuiPlugin(MultiscaleFusionGuiPlugin&&) = delete;                 // Move Constructor
+  MultiscaleFusionGuiPlugin(MultiscaleFusionGuiPlugin&&) = delete;                 // Move Constructor Not Implemented
   MultiscaleFusionGuiPlugin& operator=(const MultiscaleFusionGuiPlugin&) = delete; // Copy Assignment Not Implemented
   MultiscaleFusionGuiPlugin& operator=(MultiscaleFusionGuiPlugin&&) = delete;      // Move Assignment Not Implemented
 };
