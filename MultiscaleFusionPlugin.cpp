@@ -2,6 +2,7 @@
  * Your License or Copyright can go here
  */
 
+#include "MultiscaleFusion/MultiscaleFusionVersion.h"
 #include "MultiscaleFusionPlugin.h"
 
 #include <QtCore/QFile>
