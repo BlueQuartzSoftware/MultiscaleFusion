@@ -102,26 +102,25 @@ void ITKPhaseCorrelationImageRegistration::dataCheckInternal()
 template <typename FixedPixelType, typename MovingPixelType, unsigned int Dimension>
 void ITKPhaseCorrelationImageRegistration::filter()
 {
-  typedef itk::Dream3DImage<FixedPixelType, Dimension> FixedImageType;
-  typedef itk::Dream3DImage<MovingPixelType, Dimension> MovingImageType;
+  using FixedImageType = itk::Dream3DImage<FixedPixelType, Dimension>;
+  using MovingImageType = itk::Dream3DImage<MovingPixelType, Dimension>;
   //
   // init the registration method
   //
 
-  typedef itk::PhaseCorrelationImageRegistrationMethod< FixedImageType, MovingImageType > RegistrationType;
+  using RegistrationType = itk::PhaseCorrelationImageRegistrationMethod< FixedImageType, MovingImageType >;
   typename RegistrationType::Pointer filter = RegistrationType::New();
 
-  typedef itk::PhaseCorrelationOperator< typename itk::NumericTraits< FixedPixelType >::RealType, Dimension >
-    OperatorType;
+  using OperatorType = itk::PhaseCorrelationOperator< typename itk::NumericTraits< FixedPixelType >::RealType, Dimension >;
   typename OperatorType::Pointer pcmOperator = OperatorType::New();
   filter->SetOperator( pcmOperator );
 
-  typedef itk::MaxPhaseCorrelationOptimizer<RegistrationType> OptimizerType;
+  using OptimizerType = itk::MaxPhaseCorrelationOptimizer<RegistrationType>;
   typename OptimizerType::Pointer pcmOptimizer = OptimizerType::New();
   filter->SetOptimizer( pcmOptimizer );
 
-  typedef itk::InPlaceDream3DDataToImageFilter<FixedPixelType, Dimension> FixedtoITKType;
-  typedef itk::InPlaceDream3DDataToImageFilter<MovingPixelType, Dimension> MovingtoITKType;
+  using FixedtoITKType = itk::InPlaceDream3DDataToImageFilter<FixedPixelType, Dimension>;
+  using MovingtoITKType = itk::InPlaceDream3DDataToImageFilter<MovingPixelType, Dimension>;
   DataArrayPath dapMoving = getMovingCellArrayPath();
   DataContainer::Pointer dcMoving = getDataContainerArray()->getDataContainer(dapMoving.getDataContainerName());
   // Create a bridge to wrap an existing DREAM.3D array with an ItkImage container
@@ -157,9 +156,9 @@ void ITKPhaseCorrelationImageRegistration::filter()
     typename RegistrationType::TransformType::ConstPointer transform
       = filter->GetOutput()->Get();
     QString transformParameters = "Transform Parameters: ";
-    for(unsigned int d = 0; d < Dimension; d++)
+    for(unsigned int dim = 0; dim < Dimension; ++dim)
     {
-      transformParameters += QString::number(parameters[d]) + " ";
+      transformParameters += QString::number(parameters[dim]) + " ";
     }
     notifyWarningMessage(getHumanLabel(), transformParameters, 0);
   } catch(itk::ExceptionObject& err)
