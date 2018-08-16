@@ -77,7 +77,8 @@ void ITKPhaseCorrelationImageRegistration::readFilterParameters(AbstractFilterPa
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-template <typename InputPixelType, typename OutputPixelType, unsigned int Dimension> void ITKPhaseCorrelationImageRegistration::dataCheck()
+template <typename InputPixelType, typename OutputPixelType, unsigned int Dimension>
+void ITKPhaseCorrelationImageRegistration::dataCheck()
 {
   setErrorCondition(0);
   setWarningCondition(0);
@@ -98,7 +99,8 @@ void ITKPhaseCorrelationImageRegistration::dataCheckInternal()
 //
 // -----------------------------------------------------------------------------
 
-template <typename FixedPixelType, typename MovingPixelType, unsigned int Dimension> void ITKPhaseCorrelationImageRegistration::filter()
+template <typename FixedPixelType, typename MovingPixelType, unsigned int Dimension>
+void ITKPhaseCorrelationImageRegistration::filter()
 {
   typedef itk::Dream3DImage<FixedPixelType, Dimension> FixedImageType;
   typedef itk::Dream3DImage<MovingPixelType, Dimension> MovingImageType;
