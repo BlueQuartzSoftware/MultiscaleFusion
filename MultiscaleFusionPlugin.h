@@ -163,7 +163,7 @@ class MultiscaleFusion_EXPORT MultiscaleFusionPlugin : public QObject, public IS
     QList<QString>      m_Filters;
     bool                m_DidLoad;
 
-    MultiscaleFusionPlugin(const MultiscaleFusionPlugin&); // Copy Constructor Not Implemented
+    MultiscaleFusionPlugin(const MultiscaleFusionPlugin&) = delete; // Copy Constructor Not Implemented
     void operator=(const MultiscaleFusionPlugin&); // Operator '=' Not Implemented
 };
 

@@ -120,8 +120,9 @@ class MultiscaleFusion_EXPORT MyFilter : public AbstractFilter
     */
     void initialize();
 
-  private:
-    MyFilter(const MyFilter&); // Copy Constructor Not Implemented
+  public:
+    MyFilter(const MyFilter&) = delete;            // Copy Constructor Not Implemented
+    MyFilter(MyFilter&&) = delete;                 // Move Constructor Not Implemented
     MyFilter& operator=(const MyFilter&) = delete; // Copy Assignment Not Implemented
     MyFilter& operator=(MyFilter&&) = delete;      // Move Assignment Not Implemented
 };

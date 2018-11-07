@@ -132,9 +132,11 @@ protected:
   */
   template <typename InputImageType, typename OutputImageType, unsigned int Dimension> void filter();
 
-private:
+public:
   ITKPhaseCorrelationImageRegistration(const ITKPhaseCorrelationImageRegistration&) = delete; // Copy Constructor Not Implemented
-  void operator=(const ITKPhaseCorrelationImageRegistration&);                   // Operator '=' Not Implemented
+  ITKPhaseCorrelationImageRegistration(ITKPhaseCorrelationImageRegistration&&) = delete;      // Move Constructor Not Implemented
+  ITKPhaseCorrelationImageRegistration& operator=(const ITKPhaseCorrelationImageRegistration&) = delete; // Copy Assignment Not Implemented
+  ITKPhaseCorrelationImageRegistration& operator=(ITKPhaseCorrelationImageRegistration&&) = delete;      // Move Assignment Not Implemented
 };
 
 #ifdef __clang__
