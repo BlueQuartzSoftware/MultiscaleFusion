@@ -11,6 +11,8 @@
 
 #include "MultiscaleFusion/MultiscaleFusionDLLExport.h"
 
+#include "itkMacro.h"
+
 /**
  * @brief The MultiscaleFusionPlugin class
  */
@@ -19,9 +21,10 @@ class MultiscaleFusion_EXPORT MultiscaleFusionPlugin : public QObject, public IS
 {
     Q_OBJECT
     Q_INTERFACES(ISIMPLibPlugin)
-    Q_PLUGIN_METADATA(IID "com.your.domain.MultiscaleFusionPlugin")
+    Q_PLUGIN_METADATA(IID "com.kitware.MultiscaleFusionPlugin")
 
   public:
+    ITK_DISALLOW_COPY_AND_ASSIGN(MultiscaleFusionPlugin);
     MultiscaleFusionPlugin();
     virtual ~MultiscaleFusionPlugin();
     
@@ -162,8 +165,5 @@ class MultiscaleFusion_EXPORT MultiscaleFusionPlugin : public QObject, public IS
     QString             m_Copyright;
     QList<QString>      m_Filters;
     bool                m_DidLoad;
-
-    MultiscaleFusionPlugin(const MultiscaleFusionPlugin&) = delete; // Copy Constructor Not Implemented
-    void operator=(const MultiscaleFusionPlugin&); // Operator '=' Not Implemented
 };
 
