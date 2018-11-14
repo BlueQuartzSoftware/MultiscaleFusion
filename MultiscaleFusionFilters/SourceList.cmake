@@ -48,14 +48,10 @@ set(_PrivateFilters
 foreach(f ${_PrivateFilters} )
   ADD_SIMPL_FILTER(  "${PLUGIN_NAME}" "${PLUGIN_NAME}"
                         ${_filterGroupName} ${f}
-                        ${${PLUGIN_NAME}_SOURCE_DIR}/Documentation/${_filterGroupName}/${f}.md FALSE ${${PLUGIN_NAME}_BINARY_DIR})
+                        ${${PLUGIN_NAME}_SOURCE_DIR}/Documentation/${_filterGroupName}/${f}.md
+                        FALSE
+                        ${${PLUGIN_NAME}_BINARY_DIR})
 endforeach()
-
-#-------------
-# These are files that need to be compiled into DREAM3DLib but are NOT filters
-
-set(Project_SRCS ${Project_SRCS}
-    ${PLUGINS_SOURCE_DIR}/ITKImageProcessing/ITKImageProcessingFilters/ITKImageBase.h)
 
 #---------------------
 # This macro must come last after we are done adding all the filters and support files.

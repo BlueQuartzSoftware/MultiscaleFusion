@@ -204,6 +204,7 @@ target_include_directories(${plug_target_name}
                               ${PLUGINS_SOURCE_DIR}
                               ${PLUGINS_BINARY_DIR}
                               ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}Filters
+                              ${ITKImageProcessing_SOURCE_DIR} # for ITKImageBase.h
 )
 # --------------------------------------------------------------------
 # Set some additional properties of the plugin like its output name
