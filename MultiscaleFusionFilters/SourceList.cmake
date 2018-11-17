@@ -19,6 +19,7 @@ SIMPL_START_FILTER_GROUP(
 set(_PublicFilters
   MyFilter
   ITKPhaseCorrelationImageRegistration
+  ITKMontageFromFilesystem
 )
 
 list(LENGTH _PublicFilters PluginNumFilters)

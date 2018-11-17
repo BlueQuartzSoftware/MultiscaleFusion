@@ -11,7 +11,7 @@
 #include "MultiscaleFusion/MultiscaleFusionDLLExport.h"
 
 /**
- * @brief The MyFilter class. See [Filter documentation](@ref myfilter) for details.
+ * @brief The ITKMontageFromFilesystem class. See [Filter documentation](@ref myfilter) for details.
  */
 class MultiscaleFusion_EXPORT MyFilter : public AbstractFilter
 {
