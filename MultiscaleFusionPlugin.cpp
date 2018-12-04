@@ -1,6 +1,4 @@
-/*
- * Your License or Copyright can go here
- */
+/* © 2018 Kitware Inc. Provided under Apache 2.0 license. */
 
 #include "MultiscaleFusion/MultiscaleFusionVersion.h"
 #include "MultiscaleFusionPlugin.h"
@@ -23,19 +21,13 @@
 MultiscaleFusionPlugin::MultiscaleFusionPlugin()
 : m_Version(MultiscaleFusion::Version::Package())
 , m_CompatibilityVersion(MultiscaleFusion::Version::Package())
-, m_Vendor("BlueQuartz Software")
-, // Initialize MultiscaleFusion's Vendor Name Here
-    m_URL("http://www.github.com/bluequartzsoftware/MultiscaleFusion")
-, // Initialize Company URL Here
-    m_Location("")
-, // Initialize MultiscaleFusion library Location Here
-    m_Description("")
-, // Initialize MultiscaleFusion's Description Here
-    m_Copyright("")
-, // Initialize MultiscaleFusion's Copyright Here
-    m_Filters(QList<QString>())
-, // Initialize MultiscaleFusion's List of Dependencies Here
-    m_DidLoad(false)
+, m_Vendor("Kitware Inc.")
+, m_URL("http://www.github.com/bluequartzsoftware/MultiscaleFusion")
+, m_Location("")
+, m_Description("")
+, m_Copyright("© 2018 Kitware Inc.")
+, m_Filters(QList<QString>()) // Initialize MultiscaleFusion's List of Dependencies Here
+, m_DidLoad(false)
 {
 }
 
