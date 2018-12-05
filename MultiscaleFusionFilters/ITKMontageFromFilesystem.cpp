@@ -483,7 +483,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
 
   using Dream3DImageType = itk::Dream3DImage<PixelType, Dimension>;
   using StreamingFilterType = itk::StreamingImageFilter<OriginalImageType, Dream3DImageType>;
-  StreamingFilterType::Pointer streamingFilter = StreamingFilterType::New();
+  typename StreamingFilterType::Pointer streamingFilter = StreamingFilterType::New();
   streamingFilter->SetInput(resampleF->GetOutput());
   streamingFilter->SetNumberOfStreamDivisions(streamSubdivisions);
 
