@@ -22,6 +22,10 @@
 #include "MultiscaleFusion/MultiscaleFusionConstants.h"
 #include "MultiscaleFusion/MultiscaleFusionVersion.h"
 
+#include "SIMPLib/ITK/itkGetComponentsDimensions.h"
+#include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
+
+#include "SIMPLib/ITK/itkImageReaderHelper.cpp"
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -596,10 +600,3 @@ const QUuid ITKMontageFromFilesystem::getUuid()
 {
   return QUuid("{848d5eb2-ec42-11e8-8eb2-f2801f1b9fd1}");
 }
-
-#define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
-
-#include "SIMPLib/ITK/itkGetComponentsDimensions.h"
-#include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
-
-#include "SIMPLib/ITK/itkImageReaderHelper.cpp"
