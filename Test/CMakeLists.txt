@@ -13,13 +13,8 @@ set(TEST_NAMES
 
 )
 
-list(APPEND ${PLUGIN_NAME}_LINK_LIBS Qt5::Core H5Support SIMPLib)
+list(APPEND ${PLUGIN_NAME}_LINK_LIBS Qt5::Core H5Support SIMPLib ${ITK_LIBRARIES})
 
-if(APPLE)
- list(APPEND ${PLUGIN_NAME}_LINK_LIBS SimpleITKExplicit)
-else()
-  list(APPEND ${PLUGIN_NAME}_LINK_LIBS ${ITK_LIBRARIES})
-endif()
 #------------------------------------------------------------------------------
 # Include this file from the CMP Project
 include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake)

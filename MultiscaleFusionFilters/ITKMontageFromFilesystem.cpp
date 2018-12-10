@@ -25,6 +25,8 @@
 #include "SIMPLib/ITK/itkGetComponentsDimensions.h"
 #include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
 
+#define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
+
 #include "SIMPLib/ITK/itkImageReaderHelper.cpp"
 // -----------------------------------------------------------------------------
 //
