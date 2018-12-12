@@ -28,6 +28,22 @@
 #define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
 
 #include "SIMPLib/ITK/itkImageReaderHelper.cpp"
+
+#include <itkBMPImageIOFactory.h>
+#include <itkBioRadImageIOFactory.h>
+#include <itkGE4ImageIOFactory.h>
+#include <itkGE5ImageIOFactory.h>
+#include <itkGiplImageIOFactory.h>
+#include <itkJPEGImageIOFactory.h>
+#include <itkMRCImageIOFactory.h>
+#include <itkMetaImageIOFactory.h>
+#include <itkNiftiImageIOFactory.h>
+#include <itkNrrdImageIOFactory.h>
+#include <itkPNGImageIOFactory.h>
+#include <itkStimulateImageIOFactory.h>
+#include <itkTIFFImageIOFactory.h>
+#include <itkVTKImageIOFactory.h>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -151,6 +167,12 @@ void ITKMontageFromFilesystem::dataCheck() // plagiarized from DREAM3D_Plugins/I
       QFileInfo fi(fileList[0]);
       DataArrayPath dap(getDataContainerName(), getCellAttributeMatrixName(), fi.baseName());
       readImage(dap, true); // will add an attribute array if successful
+	  if (getErrorCondition() == -5) // If there is an error related to ITK ImageIO factories, register them and try again
+	  {
+		  setErrorCondition(0); // Reset error condition
+		  registerImageIOFactories();
+		  readImage(dap, true);
+	  }
       if(getErrorCondition() >= 0)
       {
         // Remove the attribute array that we don't need at this point
@@ -529,6 +551,28 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   toDream3DFilter->SetDataContainer(container);
   toDream3DFilter->Update();
 
+}
+
+void ITKMontageFromFilesystem::registerImageIOFactories()
+{
+	itk::JPEGImageIOFactory::RegisterOneFactory();
+	itk::NrrdImageIOFactory::RegisterOneFactory();
+	itk::PNGImageIOFactory::RegisterOneFactory();
+	itk::TIFFImageIOFactory::RegisterOneFactory();
+	itk::JPEGImageIOFactory::RegisterOneFactory();
+	itk::BMPImageIOFactory::RegisterOneFactory();
+	itk::MetaImageIOFactory::RegisterOneFactory();
+	itk::NiftiImageIOFactory::RegisterOneFactory();
+	itk::GiplImageIOFactory::RegisterOneFactory();
+	itk::VTKImageIOFactory::RegisterOneFactory();
+	itk::StimulateImageIOFactory::RegisterOneFactory();
+	itk::BioRadImageIOFactory::RegisterOneFactory();
+	itk::GE4ImageIOFactory::RegisterOneFactory();
+	itk::GE5ImageIOFactory::RegisterOneFactory();
+	itk::MRCImageIOFactory::RegisterOneFactory();
+#ifdef ITK_IMAGE_PROCESSING_HAVE_SCIFIO
+	itk::SCIFIOImageIOFactory::RegisterOneFactory();
+#endif
 }
 
 // -----------------------------------------------------------------------------

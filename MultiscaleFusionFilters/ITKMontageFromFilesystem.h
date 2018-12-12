@@ -116,6 +116,11 @@ public:
    */
   void preflight() override;
 
+  /**
+   * @brief register ImageIO factories
+   */
+  void registerImageIOFactories();
+
 signals:
   /**
    * @brief updateFilterParameters Emitted when the Filter requests all the latest Filter parameters
