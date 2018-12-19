@@ -70,6 +70,7 @@ void ITKMontageFromFilesystem::initialize()
   setErrorCondition(0);
   setWarningCondition(0);
   setCancel(false);
+  registerImageIOFactories();
 }
 
 // -----------------------------------------------------------------------------
@@ -443,7 +444,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   {
     y1 = 0;
   }
-  PointType originAdjustment = tilePositions[x1][y1] - tilePositions[0][0];
+  PointType originAdjustment = tilePositions[y1][x1] - tilePositions[0][0];
 
   using MontageType = itk::TileMontage<ScalarImageType>;
   typename MontageType::Pointer montage = MontageType::New();
