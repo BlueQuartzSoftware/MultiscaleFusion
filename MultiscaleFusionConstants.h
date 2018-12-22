@@ -12,7 +12,7 @@ namespace MultiscaleFusionConstants
 {
   const QString MultiscaleFusionPluginFile("MultiscaleFusionPlugin");
   const QString MultiscaleFusionPluginDisplayName("MultiscaleFusionPlugin");
-  const QString MultiscaleFusionBaseName("MultiscaleFusionPlugin");
+  const QString MultiscaleFusionBaseName("MultiscaleFusion");
 
   namespace FilterGroups
   {
