@@ -96,7 +96,6 @@ void MyPrivateFilter::execute()
     return;
   }
 
-  notifyStatusMessage(getHumanLabel(), "Complete");
 }
 
 // -----------------------------------------------------------------------------
