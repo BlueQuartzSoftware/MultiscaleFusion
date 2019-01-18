@@ -24,6 +24,7 @@
 
 #include "SIMPLib/ITK/itkGetComponentsDimensions.h"
 #include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
+#include "SIMPLib/ITK/itkProgressObserver.h"
 
 #define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
 
@@ -353,6 +354,9 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   sp.Fill(1.0); // assume unit spacing
   //itk::ObjectFactoryBase::RegisterFactory(itk::TxtTransformIOFactory::New());
 
+  itk::ProgressObserver* progressObs = new itk::ProgressObserver();
+  progressObs->setFilter(this);
+
   using PeakInterpolationType = typename itk::MaxPhaseCorrelationOptimizer<PCMType>::PeakInterpolationMethod;
   using PeakFinderUnderlying = typename std::underlying_type<PeakInterpolationType>::type;
   auto peakMethod = static_cast<PeakFinderUnderlying>(peakMethodToUse);
@@ -391,7 +395,10 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   }
 
   notifyStatusMessage(getHumanLabel(), "Doing the tile registrations");
-  //itk::SimpleFilterWatcher fw(montage, "montage");
+
+  progressObs->setMessagePrefix("Registering Tiles");
+  montage->AddObserver(itk::ProgressEvent(), progressObs);
+
   montage->Update();
   notifyStatusMessage(getHumanLabel(), "Finished the tile registrations");
 
@@ -448,6 +455,9 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   //w->UseCompressionOn();
   //w->SetNumberOfStreamDivisions(streamSubdivisions);
   //w->Update();
+
+  progressObs->setMessagePrefix("Stitching Tiles Together");
+  resampleF->AddObserver(itk::ProgressEvent(), progressObs);
 
   streamingFilter->Update();
   notifyStatusMessage(getHumanLabel(), "Finished resampling tiles");
