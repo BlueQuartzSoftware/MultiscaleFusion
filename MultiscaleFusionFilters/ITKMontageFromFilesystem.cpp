@@ -127,79 +127,93 @@ void ITKMontageFromFilesystem::dataCheck() // plagiarized from DREAM3D_Plugins/I
     return;
   }
 
-  bool hasMissingFiles = false;
-  bool orderAscending = false;
+  QFileInfo tileConfiguration(QDir(m_InputFileListInfo.InputPath), "TileConfiguration.txt");
 
-  if(m_InputFileListInfo.Ordering == 0)
+  if(tileConfiguration.exists())
   {
-    orderAscending = true;
-  }
-  else if(m_InputFileListInfo.Ordering == 1)
-  {
-    orderAscending = false;
-  }
-
-  // Now generate all the file names the user is asking for and populate the table
-  QVector<QString> fileList = FilePathGenerator::GenerateFileList(m_InputFileListInfo.StartIndex, m_InputFileListInfo.EndIndex, m_InputFileListInfo.IncrementIndex, hasMissingFiles, orderAscending,
-                                                                  m_InputFileListInfo.InputPath, m_InputFileListInfo.FilePrefix, m_InputFileListInfo.FileSuffix, m_InputFileListInfo.FileExtension,
-                                                                  m_InputFileListInfo.PaddingDigits);
-
-  if(fileList.empty())
-  {
-    QString ss = QObject::tr("No files have been selected for import. Have you set the input directory?");
-    setErrorCondition(-11);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    QString tileConfigPath = tileConfiguration.absoluteFilePath();
+    QString ss = QObject::tr("Found %1 file. Using it and ignoring InputFileList").arg(tileConfigPath);
+    notifyStatusMessage(getMessagePrefix(), getHumanLabel(), ss);
+    PositionTableType pt;
+    FilenameTableType ft;
+    loadTileConfiguration(m_InputFileListInfo.InputPath.toStdString(), m_MontageSize.x, m_MontageSize.y, pt, ft);
   }
   else
   {
-    setFileName(fileList[0]);
-    QFileInfo fi(fileList[0]);
-    DataArrayPath dap(getDataContainerName(), getCellAttributeMatrixName(), fi.baseName());
-    readImage(dap, true); // will add an attribute array if successful
-    if (getErrorCondition() == -5) // If there is an error related to ITK ImageIO factories, register them and try again
+    bool hasMissingFiles = false;
+    bool orderAscending = false;
+
+    if(m_InputFileListInfo.Ordering == 0)
     {
-      setErrorCondition(0); // Reset error condition
-      registerImageIOFactories();
-      readImage(dap, true);
+      orderAscending = true;
     }
-    if(getErrorCondition() >= 0)
+    else if(m_InputFileListInfo.Ordering == 1)
     {
-      // Remove the attribute array that we don't need at this point
-      AttributeMatrix::Pointer am = m->getAttributeMatrix(getCellAttributeMatrixName());
-      am->removeAttributeArray(fi.baseName());
+      orderAscending = false;
     }
 
-    AttributeMatrix::Pointer mdAttrMat = getDataContainerArray()->getDataContainer(getDataContainerName())->getAttributeMatrix(getMetaDataAttributeMatrixName());
-    size_t availableFileCount = 0;
-    for(QVector<QString>::iterator filepath = fileList.begin(); filepath != fileList.end(); ++filepath)
+    // Now generate all the file names the user is asking for and populate the table
+    QVector<QString> fileList = FilePathGenerator::GenerateFileList(m_InputFileListInfo.StartIndex, m_InputFileListInfo.EndIndex, m_InputFileListInfo.IncrementIndex, hasMissingFiles, orderAscending,
+                                                                    m_InputFileListInfo.InputPath, m_InputFileListInfo.FilePrefix, m_InputFileListInfo.FileSuffix, m_InputFileListInfo.FileExtension,
+                                                                    m_InputFileListInfo.PaddingDigits);
+
+    if(fileList.empty())
     {
-      QString imageFName = *filepath;
-      QFileInfo fi(imageFName);
-      if(fi.exists())
+      QString ss = QObject::tr("No files have been selected for import. Have you set the input directory?");
+      setErrorCondition(-11);
+      notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    }
+    else
+    {
+      setFileName(fileList[0]);
+      QFileInfo fi(fileList[0]);
+      DataArrayPath dap(getDataContainerName(), getCellAttributeMatrixName(), fi.baseName());
+      readImage(dap, true); // will add an attribute array if successful
+	  if (getErrorCondition() == -5) // If there is an error related to ITK ImageIO factories, register them and try again
+	  {
+		  setErrorCondition(0); // Reset error condition
+		  registerImageIOFactories();
+		  readImage(dap, true);
+	  }
+      if(getErrorCondition() >= 0)
       {
-        availableFileCount++;
+        // Remove the attribute array that we don't need at this point
+        AttributeMatrix::Pointer am = m->getAttributeMatrix(getCellAttributeMatrixName());
+        am->removeAttributeArray(fi.baseName());
       }
-    }
-    mdAttrMat->setTupleDimensions(QVector<size_t>(1, availableFileCount));
 
-    QVector<size_t> cDims(1, 1);
-
-    for(QVector<QString>::iterator filepath = fileList.begin(); filepath != fileList.end(); ++filepath)
-    {
-      QString imageFName = *filepath;
-      QFileInfo fi(imageFName);
-      if(!fi.exists())
+      AttributeMatrix::Pointer mdAttrMat = getDataContainerArray()->getDataContainer(getDataContainerName())->getAttributeMatrix(getMetaDataAttributeMatrixName());
+      size_t availableFileCount = 0;
+      for(QVector<QString>::iterator filepath = fileList.begin(); filepath != fileList.end(); ++filepath)
       {
-        continue;
+        QString imageFName = *filepath;
+        QFileInfo fi(imageFName);
+        if(fi.exists())
+        {
+          availableFileCount++;
+        }
       }
-      QStringList splitFilePaths = imageFName.split('/');
-      QString fileName = splitFilePaths[splitFilePaths.size() - 1];
-      splitFilePaths = fileName.split('.');
-      DataArrayPath path(getDataContainerName(), getCellAttributeMatrixName(), splitFilePaths[0]);
-      getDataContainerArray()->createNonPrereqArrayFromPath<UInt8ArrayType, ITKMontageFromFilesystem, uint8_t>(this, path, 0, cDims);
-      if(getErrorCondition() < 0)
+      mdAttrMat->setTupleDimensions(QVector<size_t>(1, availableFileCount));
+
+      QVector<size_t> cDims(1, 1);
+
+      for(QVector<QString>::iterator filepath = fileList.begin(); filepath != fileList.end(); ++filepath)
       {
-        return;
+        QString imageFName = *filepath;
+        QFileInfo fi(imageFName);
+        if(!fi.exists())
+        {
+          continue;
+        }
+        QStringList splitFilePaths = imageFName.split('/');
+        QString fileName = splitFilePaths[splitFilePaths.size() - 1];
+        splitFilePaths = fileName.split('.');
+        DataArrayPath path(getDataContainerName(), getCellAttributeMatrixName(), splitFilePaths[0]);
+        getDataContainerArray()->createNonPrereqArrayFromPath<UInt8ArrayType, ITKMontageFromFilesystem, uint8_t>(this, path, 0, cDims);
+        if(getErrorCondition() < 0)
+        {
+          return;
+        }
       }
     }
   }
@@ -250,75 +264,87 @@ void ITKMontageFromFilesystem::execute()
   PositionTableType posTable;
   FilenameTableType filesTable;
 
-  bool hasMissingFiles = false;
-  bool orderAscending = false;
+  QFileInfo tileConfiguration(QDir(m_InputFileListInfo.InputPath), "TileConfiguration.txt");
+  if(tileConfiguration.exists())
+  {
+    QString tileConfigPath = tileConfiguration.absoluteFilePath();
+    QString ss = QObject::tr("Found %1 file. Using it and ignoring InputFileList").arg(tileConfigPath);
+    notifyStatusMessage(getMessagePrefix(), getHumanLabel(), ss);
+    loadTileConfiguration(m_InputFileListInfo.InputPath.toStdString(), m_MontageSize.x, m_MontageSize.y, posTable, filesTable);
+  }
+  else
+  {
+    bool hasMissingFiles = false;
+    bool orderAscending = false;
 
-  if(m_InputFileListInfo.Ordering == 0)
-  {
-    orderAscending = true;
-  }
-  else if(m_InputFileListInfo.Ordering == 1)
-  {
-    orderAscending = false;
-  }
-
-  // Now generate all the file names the user is asking for and populate the table
-  QVector<QString> fileList = FilePathGenerator::GenerateFileList(m_InputFileListInfo.StartIndex, m_InputFileListInfo.EndIndex, m_InputFileListInfo.IncrementIndex, hasMissingFiles, orderAscending,
-                                                                  m_InputFileListInfo.InputPath, m_InputFileListInfo.FilePrefix, m_InputFileListInfo.FileSuffix, m_InputFileListInfo.FileExtension,
-                                                                  m_InputFileListInfo.PaddingDigits);
-
-  if(fileList.empty())
-  {
-    QString ss = QObject::tr("No files have been selected for import. Have you set the input directory?");
-    setErrorCondition(-11);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-    return;
-  }
-  if(hasMissingFiles)
-  {
-    QString ss = QObject::tr("Some files from the list are missing.");
-    setErrorCondition(-12);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-    return;
-  }
-  if(fileList.size() != m_MontageSize.x * m_MontageSize.y)
-  {
-    QString ss = QObject::tr("Montage size is %1x%2=%3, but InputFileList has %4 entries.")
-        .arg(m_MontageSize.x, m_MontageSize.y, m_MontageSize.x * m_MontageSize.y).arg(fileList.size());
-    setErrorCondition(-19);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-    return;
-  }
-
-  QVector<QString>::iterator filepath = fileList.begin();
-  filesTable.resize(m_MontageSize.y);
-  posTable.resize(m_MontageSize.y);
-  for(int y = 0; y < m_MontageSize.y; y++)
-  {
-    filesTable[y].resize(m_MontageSize.x);
-    posTable[y].resize(m_MontageSize.x);
-    for(int x = 0; x < m_MontageSize.x; x++)
+    if(m_InputFileListInfo.Ordering == 0)
     {
-      assert(filepath != fileList.end());
-      QString imageFName = *filepath;
-      QFileInfo fi(imageFName);
-      if(!fi.exists())
+      orderAscending = true;
+    }
+    else if(m_InputFileListInfo.Ordering == 1)
+    {
+      orderAscending = false;
+    }
+
+    // Now generate all the file names the user is asking for and populate the table
+    QVector<QString> fileList = FilePathGenerator::GenerateFileList(m_InputFileListInfo.StartIndex, m_InputFileListInfo.EndIndex, m_InputFileListInfo.IncrementIndex, hasMissingFiles, orderAscending,
+                                                                    m_InputFileListInfo.InputPath, m_InputFileListInfo.FilePrefix, m_InputFileListInfo.FileSuffix, m_InputFileListInfo.FileExtension,
+                                                                    m_InputFileListInfo.PaddingDigits);
+
+    if(fileList.empty())
+    {
+      QString ss = QObject::tr("No files have been selected for import. Have you set the input directory?");
+      setErrorCondition(-11);
+      notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+      return;
+    }
+    if(hasMissingFiles)
+    {
+      QString ss = QObject::tr("Some files from the list are missing.");
+      setErrorCondition(-12);
+      notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+      return;
+    }
+    if(fileList.size() != m_MontageSize.x * m_MontageSize.y)
+    {
+      QString ss = QObject::tr("Montage size is %1x%2=%3, but InputFileList has %4 entries.")
+          .arg(m_MontageSize.x, m_MontageSize.y, m_MontageSize.x * m_MontageSize.y).arg(fileList.size());
+      setErrorCondition(-19);
+      notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+      return;
+    }
+
+    QVector<QString>::iterator filepath = fileList.begin();
+    filesTable.resize(m_MontageSize.y);
+    posTable.resize(m_MontageSize.y);
+    for(int y = 0; y < m_MontageSize.y; y++)
+    {
+      filesTable[y].resize(m_MontageSize.x);
+      posTable[y].resize(m_MontageSize.x);
+      for(int x = 0; x < m_MontageSize.x; x++)
       {
-        QString ss = QObject::tr("%1 does not exist").arg(imageFName);
-        setErrorCondition(-11);
-        notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-        return;
+        assert(filepath != fileList.end());
+        QString imageFName = *filepath;
+        QFileInfo fi(imageFName);
+        if(!fi.exists())
+        {
+          QString ss = QObject::tr("%1 does not exist").arg(imageFName);
+          setErrorCondition(-11);
+          notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+          return;
+        }
+
+        filesTable[y][x] = imageFName.toStdString();
+
+        PointType p;
+        p.Fill(0.0);
+        posTable[y][x] = p;
+
+        ++filepath; //get next filename from the list
       }
-
-      filesTable[y][x] = imageFName.toStdString();
-
-      PointType p;
-      p.Fill(0.0);
-      posTable[y][x] = p;
-
-      ++filepath; //get next filename from the list
     }
   }
+  //either way, posTable and filesTable are now filled
 
   if(getCancel())
   {
@@ -336,8 +362,57 @@ void ITKMontageFromFilesystem::execute()
 }
 
 // -----------------------------------------------------------------------------
-// streamSubdivisions of 1 disables streaming (higher memory useage, less cluttered debug output)
+//
 // -----------------------------------------------------------------------------
+void ITKMontageFromFilesystem::loadTileConfiguration(std::string dirPath, unsigned xSize, unsigned ySize, PositionTableType& pos, FilenameTableType& files)
+{
+  std::string fileName = dirPath + "/TileConfiguration.txt";
+  std::ifstream fStage(fileName);
+  if(!fStage)
+  {
+    QString ss = QObject::tr("%1 exists but could not be opened for reading").arg(QString::fromStdString(fileName));
+    setErrorCondition(-17);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return;
+  }
+
+  std::string temp;
+  std::getline(fStage, temp); // throw away header
+  std::getline(fStage, temp); // throw away header
+  std::getline(fStage, temp); // throw away header
+  std::getline(fStage, temp); // throw away header
+
+  // read coordinates from files
+  files.resize(ySize);
+  pos.resize(ySize);
+  for(unsigned y = 0; y < ySize; y++)
+  {
+    files[y].resize(xSize);
+    pos[y].resize(xSize);
+    for(unsigned x = 0; x < xSize; x++)
+    {
+      std::getline(fStage, temp, ';');
+      if(!fStage)
+      {
+        QString ss = QObject::tr("Could not read information for tile %1 (%2,%3)").arg(x + y * xSize, x, y);
+        setErrorCondition(-18);
+        notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+        return;
+      }
+      files[y][x] = std::string(dirPath + std::string("/") + temp);
+      std::getline(fStage, temp, '(');
+
+      PointType p;
+      fStage >> p[0];
+      fStage.ignore();
+      fStage >> p[1];
+      pos[y][x] = p;
+      std::getline(fStage, temp); // throw away rest of line
+    }
+  }
+}
+
+// streamSubdivisions of 1 disables streaming (higher memory useage, less cluttered debug output)
 template <typename PixelType, typename AccumulatePixelType>
 void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions, const FilenameTableType& filenames, int peakMethodToUse, unsigned streamSubdivisions)
 {
@@ -417,12 +492,12 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   using Resampler = itk::TileMergeImageFilter<OriginalImageType, AccumulatePixelType>;
   typename Resampler::Pointer resampleF = Resampler::New();
   //itk::SimpleFilterWatcher fw2(resampleF, "resampler");
-//  if(true)
-//  {
-//    resampleF->SetMontage(montage);
-//  }
-//  else
-//  {
+  if(true)
+  {
+    resampleF->SetMontage(montage);
+  }
+  else
+  {
     resampleF->SetMontageSize({xSize, ySize});
     resampleF->SetOriginAdjustment(originAdjustment);
     resampleF->SetForcedSpacing(sp);
@@ -436,7 +511,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
         resampleF->SetTileTransform(ind, montage->GetOutputTransform(ind));
       }
     }
-//  }
+  }
 
   using Dream3DImageType = itk::Dream3DImage<PixelType, Dimension>;
   using StreamingFilterType = itk::StreamingImageFilter<OriginalImageType, Dream3DImageType>;
