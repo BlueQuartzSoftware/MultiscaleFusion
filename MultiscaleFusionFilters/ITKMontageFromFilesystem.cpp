@@ -473,7 +473,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   using Resampler = itk::TileMergeImageFilter<OriginalImageType, AccumulatePixelType>;
   typename Resampler::Pointer resampleF = Resampler::New();
   //itk::SimpleFilterWatcher fw2(resampleF, "resampler");
-  if(true)
+  if(false)
   {
     resampleF->SetMontage(montage);
   }
