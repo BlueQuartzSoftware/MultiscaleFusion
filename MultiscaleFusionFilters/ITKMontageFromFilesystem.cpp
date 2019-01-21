@@ -25,6 +25,7 @@
 #include "SIMPLib/ITK/itkGetComponentsDimensions.h"
 #include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
 #include "SIMPLib/ITK/itkProgressObserver.h"
+#include "SIMPLib/ITK/itkFijiConfigurationFileReader.hpp"
 
 #define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
 
@@ -136,7 +137,9 @@ void ITKMontageFromFilesystem::dataCheck() // plagiarized from DREAM3D_Plugins/I
     notifyStatusMessage(getMessagePrefix(), getHumanLabel(), ss);
     PositionTableType pt;
     FilenameTableType ft;
-    loadTileConfiguration(m_InputFileListInfo.InputPath.toStdString(), m_MontageSize.x, m_MontageSize.y, pt, ft);
+
+    itk::FijiConfigurationFileReader fijiFileReader;
+    itk::FijiFileData fijiFileData = fijiFileReader.parseFijiConfigFile(tileConfigPath);
   }
   else
   {
@@ -270,7 +273,36 @@ void ITKMontageFromFilesystem::execute()
     QString tileConfigPath = tileConfiguration.absoluteFilePath();
     QString ss = QObject::tr("Found %1 file. Using it and ignoring InputFileList").arg(tileConfigPath);
     notifyStatusMessage(getMessagePrefix(), getHumanLabel(), ss);
-    loadTileConfiguration(m_InputFileListInfo.InputPath.toStdString(), m_MontageSize.x, m_MontageSize.y, posTable, filesTable);
+
+    itk::FijiConfigurationFileReader fijiFileReader;
+    itk::FijiFileData fijiFileData = fijiFileReader.parseFijiConfigFile(tileConfigPath);
+    if(fijiFileReader.getErrorCode() < 0)
+    {
+      QString ss = fijiFileReader.getErrorMessage();
+      int code = fijiFileReader.getErrorCode();
+      notifyErrorMessage(getHumanLabel(), ss, code);
+      return;
+    }
+
+    filesTable.resize(fijiFileData.size());
+    posTable.resize(fijiFileData.size());
+
+    for (int y = 0; y < fijiFileData.size(); y++)
+    {
+      itk::FijiRowData fijiRowData = fijiFileData[y];
+      filesTable[y].resize(fijiRowData.size());
+      posTable[y].resize(fijiRowData.size());
+      for (int x = 0; x < fijiRowData.size(); x++)
+      {
+        itk::FijiImageTileData fijiImageData = fijiRowData[x];
+        filesTable[y][x] = fijiImageData.filePath.toStdString();
+
+        PointType p;
+        p[0] = fijiImageData.coords.x();
+        p[1] = fijiImageData.coords.y();
+        posTable[y][x] = p;
+      }
+    }
   }
   else
   {
@@ -359,57 +391,6 @@ void ITKMontageFromFilesystem::execute()
 
   /* Let the GUI know we are done with this filter */
   notifyStatusMessage(getHumanLabel(), "Complete");
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void ITKMontageFromFilesystem::loadTileConfiguration(std::string dirPath, unsigned xSize, unsigned ySize, PositionTableType& pos, FilenameTableType& files)
-{
-  std::string fileName = dirPath + "/TileConfiguration.txt";
-  std::ifstream fStage(fileName);
-  if(!fStage)
-  {
-    QString ss = QObject::tr("%1 exists but could not be opened for reading").arg(QString::fromStdString(fileName));
-    setErrorCondition(-17);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-    return;
-  }
-
-  std::string temp;
-  std::getline(fStage, temp); // throw away header
-  std::getline(fStage, temp); // throw away header
-  std::getline(fStage, temp); // throw away header
-  std::getline(fStage, temp); // throw away header
-
-  // read coordinates from files
-  files.resize(ySize);
-  pos.resize(ySize);
-  for(unsigned y = 0; y < ySize; y++)
-  {
-    files[y].resize(xSize);
-    pos[y].resize(xSize);
-    for(unsigned x = 0; x < xSize; x++)
-    {
-      std::getline(fStage, temp, ';');
-      if(!fStage)
-      {
-        QString ss = QObject::tr("Could not read information for tile %1 (%2,%3)").arg(x + y * xSize, x, y);
-        setErrorCondition(-18);
-        notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
-        return;
-      }
-      files[y][x] = std::string(dirPath + std::string("/") + temp);
-      std::getline(fStage, temp, '(');
-
-      PointType p;
-      fStage >> p[0];
-      fStage.ignore();
-      fStage >> p[1];
-      pos[y][x] = p;
-      std::getline(fStage, temp); // throw away rest of line
-    }
-  }
 }
 
 // streamSubdivisions of 1 disables streaming (higher memory useage, less cluttered debug output)

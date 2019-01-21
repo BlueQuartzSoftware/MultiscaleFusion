@@ -168,11 +168,6 @@ protected:
   using FilenameTableType = std::vector<std::vector<std::string>>;
 
   /**
-   * @brief Loads montage input configuration from a TileConfiguration.txt file
-   */
-  void loadTileConfiguration(std::string dirPath, unsigned xSize, unsigned ySize, PositionTableType& pos, FilenameTableType& files);
-
-  /**
    * @brief Does the registrations and resampling into a big image.
    *
    * peakMethodToUse: 0=none, 1=parabolic, 2=cosine
