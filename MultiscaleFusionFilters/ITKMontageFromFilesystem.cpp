@@ -24,7 +24,7 @@
 
 #include "SIMPLib/ITK/itkGetComponentsDimensions.h"
 #include "SIMPLib/ITK/itkInPlaceImageToDream3DDataFilter.h"
-#include "SIMPLib/ITK/itkProgressObserver.h"
+#include "SIMPLib/ITK/itkProgressObserver.hpp"
 #include "SIMPLib/ITK/itkFijiConfigurationFileReader.hpp"
 
 #define ITK_IMAGE_READER_CLASS_NAME ITKMontageFromFilesystem
