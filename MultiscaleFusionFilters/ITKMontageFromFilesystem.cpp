@@ -410,7 +410,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   sp.Fill(1.0); // assume unit spacing
   //itk::ObjectFactoryBase::RegisterFactory(itk::TxtTransformIOFactory::New());
 
-  itk::ProgressObserver* progressObs = new itk::ProgressObserver();
+  itk::ProgressObserver::Pointer progressObs = itk::ProgressObserver::New();
   progressObs->setFilter(this);
 
   using PeakInterpolationType = typename itk::MaxPhaseCorrelationOptimizer<PCMType>::PeakInterpolationMethod;
@@ -453,7 +453,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   notifyStatusMessage(getHumanLabel(), "Doing the tile registrations");
 
   progressObs->setMessagePrefix("Registering Tiles");
-  montage->AddObserver(itk::ProgressEvent(), progressObs);
+  montage->AddObserver(itk::ProgressEvent(), progressObs.get());
 
   montage->Update();
   notifyStatusMessage(getHumanLabel(), "Finished the tile registrations");
@@ -513,7 +513,7 @@ void ITKMontageFromFilesystem::doMontage(const PositionTableType& tilePositions,
   //w->Update();
 
   progressObs->setMessagePrefix("Stitching Tiles Together");
-  resampleF->AddObserver(itk::ProgressEvent(), progressObs);
+  resampleF->AddObserver(itk::ProgressEvent(), progressObs.get());
 
   streamingFilter->Update();
   notifyStatusMessage(getHumanLabel(), "Finished resampling tiles");
