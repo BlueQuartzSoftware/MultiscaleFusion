@@ -17,7 +17,6 @@ SIMPL_START_FILTER_GROUP(
 #---------
 # List your public filters here
 set(_PublicFilters
-  MyFilter
   ITKPhaseCorrelationImageRegistration
 )
 
@@ -40,7 +39,7 @@ endforeach()
 # This is the list of Private Filters. These filters are available from other filters but the user will not
 # be able to use them from the DREAM3D user interface.
 set(_PrivateFilters
-  MyPrivateFilter
+
 )
 
 #-----------------
