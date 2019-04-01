@@ -160,12 +160,11 @@ void ITKPhaseCorrelationImageRegistration::filter()
     {
       transformParameters += QString::number(parameters[dim]) + " ";
     }
-    notifyWarningMessage(transformParameters, 0);
+    @@SET_WARNING_CONDITION@@(@@0@@, transformParameters);
   } catch(itk::ExceptionObject& err)
   {
-    setErrorCondition(-55558);
     QString errorMessage = "ITK exception was thrown while filtering input image: %1";
-    notifyErrorMessage(errorMessage.arg(err.GetDescription()), getErrorCondition());
+    setErrorCondition(-55558, errorMessage.arg(err.GetDescription()));
     return;
   }
 }
