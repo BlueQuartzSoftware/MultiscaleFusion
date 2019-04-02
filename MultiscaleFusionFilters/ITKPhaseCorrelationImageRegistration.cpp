@@ -80,8 +80,8 @@ void ITKPhaseCorrelationImageRegistration::readFilterParameters(AbstractFilterPa
 template <typename InputPixelType, typename OutputPixelType, unsigned int Dimension>
 void ITKPhaseCorrelationImageRegistration::dataCheck()
 {
-  clearErrorCondition();
-  clearWarningCondition();
+  clearErrorCode();
+  clearWarningCode();
 
   imageCheck<InputPixelType, Dimension>(getSelectedCellArrayPath());
   imageCheck<InputPixelType, Dimension>(getMovingCellArrayPath());
